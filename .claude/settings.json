@@ -1,0 +1,58 @@
+{
+  "project": {
+    "name": "core-application-agents-AI",
+    "stack": {
+      "backend": ".NET Framework 4.7 (C#)",
+      "frontend": "XAML / WPF (Windows Presentation Foundation)",
+      "pattern": "MVVM + Clean/Hexagonal Architecture core integration"
+    }
+  },
+  "permissions": {
+    "allow": [
+      "read",
+      "search",
+      "grep",
+      "glob",
+      "cat",
+      "git status",
+      "git log",
+      "git diff",
+      "msbuild",
+      "dotnet test",
+      "dir",
+      "find"
+    ],
+    "deny": [
+      "rm -rf",
+      "git push --force",
+      "git push -f",
+      "DROP ",
+      "TRUNCATE ",
+      "DELETE FROM",
+      "UPDATE ",
+      "INSERT INTO",
+      "ALTER TABLE DROP",
+      "rm -r",
+      "del /f /s /q",
+      "rmdir /s /q",
+      "format",
+      "diskpart"
+    ]
+  },
+  "tooling": {
+    "compiler": "msbuild",
+    "testRunner": "dotnet test",
+    "uiValidation": "xaml-parser",
+    "preferredShell": "powershell"
+  },
+  "directories": {
+    "agents": ".claude/agents",
+    "commands": ".claude/commands",
+    "rules": ".claude/rules",
+    "lessonsLearned": "docs/lessons-learned"
+  },
+  "logging": {
+    "level": "info",
+    "storeDecisions": true
+  }
+}
