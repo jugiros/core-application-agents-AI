@@ -1,44 +1,77 @@
-# Sistema Principal de Agente Arquitectónico
+# Sistema Principal de Agente Arquitectónico — Fintech Microservicio
 
 ## Contexto global del proyecto
 
-Este espacio de trabajo está configurado para una aplicación de escritorio empresarial construida sobre el siguiente stack tecnológico:
+Este espacio de trabajo está configurado para un **microservicio financiero** de backend construido sobre el siguiente stack tecnológico:
 
-- **Backend**: .NET Framework 4.7 (C#)
-- **Frontend**: XAML / WPF (Windows Presentation Foundation)
-- **Patrón arquitectónico**: MVVM (Model-View-ViewModel) con integración de principios de Clean/Hexagonal Architecture en el núcleo C#.
+- **Backend**: .NET Core 9 (C#) — microservicio REST API
+- **Arquitectura**: Hexagonal (Puertos y Adaptadores) + Domain-Driven Design (DDD)
+- **Patrón CQRS**: MediatR para separación de Commands y Queries
+- **Caché distribuida**: Redis (Cache-Aside para saldos, idempotencia de transferencias)
+- **Seguridad**: OAuth 2.0 + JWT — validación en capa de Infraestructura (Adaptadores Inbound)
 - **Motor de automatización**: Claude Code CLI / Windsurf Workspace
+- **Dominio de negocio**: Transferencias bancarias y visualización de saldos (BIAN v12)
 
-## Propósito de este directorio
+## Principios rectores del proyecto
 
-La carpeta `.claude/` centraliza la configuración, los perfiles de agentes, los comandos slash y las reglas técnicas que rigen la generación y modificación de código dentro de este repositorio. Cada archivo aquí contenido debe ser considerado de lectura obligatoria antes de realizar cualquier edición estructural.
+Todo agente activo en este espacio debe aplicar en cada cambio:
+
+- **SOLID**: SRP en cada clase, OCP mediante puertos abstractos, DIP a través de interfaces en Application.
+- **DRY**: No duplicar lógica entre Command Handlers y Query Handlers. Usar Pipeline Behaviors para preocupaciones transversales.
+- **KISS**: Preferir soluciones simples y directas. Un handler = una responsabilidad.
+- **YAGNI**: No implementar funcionalidad no requerida explícitamente. No crear capas de abstracción anticipadas.
+- **Boy Scout Rule**: Dejar cada archivo mejor de como se encontró. Si se detecta una violación a estas reglas en archivos tocados, corregirla en el mismo commit.
+
+## Capas de la arquitectura hexagonal
+
+```
+[Presentation / Adaptadores Inbound]
+  └── Controllers (ASP.NET Core) — validan OAuth 2.0, extraen claims, delegan a MediatR
+[Application / Puertos]
+  ├── Commands  (escritura, modifican estado)
+  ├── Queries   (lectura, consultan estado, usan caché Redis)
+  ├── Behaviors (Logging, Validation, Idempotency)
+  └── Ports/Driven (interfaces de repositorios, caché, mensajería)
+[Domain]
+  ├── Entities / AggregateRoots
+  ├── ValueObjects
+  ├── Domain Events
+  └── Domain Exceptions — sin dependencias de infraestructura
+[Infrastructure / Adaptadores Outbound]
+  ├── Persistence (EF Core 9 + SQL Server)
+  ├── Redis (StackExchange.Redis)
+  └── DependencyInjection (registro de servicios)
+```
 
 ## Validación de compilación
 
-Antes de considerar completa cualquier tarea, el agente debe verificar que el código generado compila satisfactoriamente mediante herramientas compatibles con .NET Framework 4.7. Los comandos de verificación permitidos incluyen:
+Antes de considerar completa cualquier tarea, el agente debe verificar:
 
-- `msbuild` contra la solución o proyecto activo.
-- El comando de test del framework en uso si el proyecto cuenta con proyectos de prueba.
-- Revisión de errores del compilador de C# y del parser de XAML.
-
-La generación de código que no compile o que produzca advertencias críticas no se considera terminada hasta que se corrijan.
+- `dotnet build` contra la solución sin errores ni advertencias (`TreatWarningsAsErrors = true`).
+- `dotnet test` para pruebas unitarias relevantes.
+- Revisión de que el Dominio no importa librerías de infraestructura o seguridad.
 
 ## Recursos compartidos
 
-El agente debe consultar y mantener actualizados los siguientes recursos históricos:
-
-- `docs/lessons-learned/`: Directorio donde se almacenan los aprendizajes por tecnología, errores recurrentes y soluciones aplicadas. El agente debe leer estas lecciones antes de iniciar cualquier implementación de módulo.
-- Memoria histórica del agente: Contexto acumulado de decisiones arquitectónicas previas, restricciones de negocio y acuerdos de equipo.
+- `docs/lessons-learned/`: Lecciones por tecnología. **Leer antes de iniciar cualquier implementación**.
+- `.claude/contexts/fintech-domain.md`: Lenguaje ubicuo del dominio financiero — leer antes de nombrar clases o métodos.
+- Memoria histórica del agente: Contexto acumulado de decisiones arquitectónicas y restricciones de negocio.
 
 ## Directrices de orquestación
 
-1. Todo cambio que afecte múltiples capas (Base de datos -> Lógica C# -> Vistas XAML/ViewModels) debe ser coordinado por el agente `fullstack-engineer`.
-2. La separación de responsabilidades MVVM no debe romperse nunca. El código de vista XAML debe depender exclusivamente de Command Binding y propiedades expuestas en ViewModels.
-3. Los agentes especializados (`senior-frontend-engineer`, `senior-backend-engineer`, `senior-dba`) operan de forma conjunta siguiendo ciclos de Analizar -> Implementar -> Validar -> Reintentar.
-4. La regla de oro del espacio de trabajo: preferir siempre correcciones mínimas en el origen del problema antes de agregar workarounds en capas superiores.
+1. Todo cambio que afecte múltiples capas debe ser coordinado por el agente `fullstack-engineer`.
+2. Todo endpoint nuevo debe ser revisado por el `senior-security-architect` antes de considerarse completo.
+3. Todo Command o Query nuevo debe ser diseñado por el `senior-cqrs-specialist`.
+4. Los agentes especializados operan en ciclos: **Analizar → Implementar → Validar → Reintentar (máx. 3 veces)**.
+5. Regla de oro: preferir correcciones mínimas en el origen del problema antes de agregar workarounds en capas superiores.
+
+## Regla de seguridad inmutable
+
+> **El Dominio nunca debe importar librerías de seguridad (`Microsoft.AspNetCore.Authorization`, `IdentityModel`, `System.Security.Claims`, etc.). La validación de tokens OAuth 2.0 ocurre exclusivamente en los Adaptadores Inbound (Controllers/Middleware).**
 
 ## Referencias de agentes y reglas
 
 - Perfiles de agentes: `.claude/agents/`
-- Comandos slash: `.claude/commands/`
 - Reglas técnicas: `.claude/rules/`
+- Contextos de dominio: `.claude/contexts/`
+- Comandos slash: `.claude/commands/`

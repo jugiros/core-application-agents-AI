@@ -1,10 +1,16 @@
 {
   "project": {
     "name": "core-application-agents-AI",
+    "domain": "Fintech — Transferencias bancarias y visualización de saldos",
     "stack": {
-      "backend": ".NET Framework 4.7 (C#)",
-      "frontend": "XAML / WPF (Windows Presentation Foundation)",
-      "pattern": "MVVM + Clean/Hexagonal Architecture core integration"
+      "backend": ".NET Core 9 (C#) — microservicio REST API",
+      "frontend": "Por definir (pendiente de especificación)",
+      "architecture": "Hexagonal (Puertos y Adaptadores) + DDD",
+      "pattern": "CQRS con MediatR — Commands y Queries separados",
+      "cache": "Redis (StackExchange.Redis) — Cache-Aside e idempotencia",
+      "security": "OAuth 2.0 + JWT — validación exclusiva en Adaptadores Inbound",
+      "persistence": "EF Core 9 + SQL Server",
+      "framework": "BIAN v12 — dominios de servicio bancarios"
     }
   },
   "permissions": {
@@ -17,8 +23,9 @@
       "git status",
       "git log",
       "git diff",
-      "msbuild",
+      "dotnet build",
       "dotnet test",
+      "dotnet run",
       "dir",
       "find"
     ],
@@ -40,16 +47,35 @@
     ]
   },
   "tooling": {
-    "compiler": "msbuild",
+    "compiler": "dotnet build",
     "testRunner": "dotnet test",
-    "uiValidation": "xaml-parser",
-    "preferredShell": "powershell"
+    "preferredShell": "powershell",
+    "migrationTool": "dotnet ef"
+  },
+  "agents": {
+    "orchestrator": "fullstack-engineer",
+    "security": "senior-security-architect",
+    "backend": "senior-backend-engineer",
+    "cqrs": "senior-cqrs-specialist",
+    "dba": "senior-dba",
+    "frontend": "senior-frontend-engineer"
   },
   "directories": {
     "agents": ".claude/agents",
     "commands": ".claude/commands",
     "rules": ".claude/rules",
+    "contexts": ".claude/contexts",
     "lessonsLearned": "docs/lessons-learned"
+  },
+  "securityRules": {
+    "domainMustNotImport": [
+      "Microsoft.AspNetCore.Authorization",
+      "IdentityModel",
+      "System.Security.Claims",
+      "Microsoft.AspNetCore.Http"
+    ],
+    "oauthValidationLayer": "Infrastructure/Adaptadores Inbound",
+    "sensitiveDataInLogs": false
   },
   "logging": {
     "level": "info",
