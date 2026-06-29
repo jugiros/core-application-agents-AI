@@ -209,13 +209,17 @@ Antes de considerar cualquier tarea completa, verificar este checklist:
 ### Checklist de principios (obligatorio con toda entrega)
 
 ```
+[ ] Qué se implementó: descripción breve de la funcionalidad entregada
 [ ] Patrón de diseño identificado y justificado
+[ ] Ventajas de versión aprovechadas: .NET 9 / EF Core 9 / MassTransit 8 / MySQL 8 / MongoDB 7 / Redis 7 (indicar cuáles aplican)
 [ ] SOLID: cuál(es) principio(s) aplican y cómo
 [ ] DRY: ¿hay duplicación? ¿fue corregida?
 [ ] KISS: ¿la solución es la más simple posible para el problema?
 [ ] YAGNI: ¿se implementó solo lo necesario?
-[ ] Boy Scout: ¿se mejoró algo en los archivos tocados?
-[ ] Recomendaciones de mejora listadas (aunque sean "sin recomendaciones")
+[ ] Boy Scout: ¿se mejoró algo en los archivos tocados? — indicar archivo y cambio
+[ ] Recomendaciones [BACK] listadas (aunque sean "Sin recomendaciones de backend")
+[ ] Recomendaciones [DBA] listadas (aunque sean "Sin recomendaciones de DBA")
+[ ] Recomendaciones [FRONT] listadas (aunque sean "Sin recomendaciones de frontend")
 ```
 
 ---

@@ -208,6 +208,10 @@ fintech-frontend/  (rama: feature/first)
 [ ] Formularios con validación Zod activa antes de submit
 [ ] Rutas protegidas verificadas en middleware.ts
 [ ] Bloque de validación de principios adjunto (patrón, SOLID, DRY, KISS, YAGNI)
+[ ] Bloque de principios incluye: qué se implementó + ventajas de Next.js 15 / React 19 aprovechadas
+[ ] Recomendaciones [BACK] listadas (aunque sean "Sin recomendaciones de backend")
+[ ] Recomendaciones [DBA] listadas (aunque sean "Sin recomendaciones de DBA")
+[ ] Recomendaciones [FRONT] listadas (aunque sean "Sin recomendaciones de frontend")
 [ ] project-context.md actualizado
 ```
 
@@ -216,9 +220,19 @@ fintech-frontend/  (rama: feature/first)
 ```
 ### Validación de principios — {NombreComponente / NombreHook}
 
+**Qué se implementó:**
+- {Descripción breve: componente, página, hook, cliente API, validación Zod, etc.}
+
 **Patrón de diseño utilizado:**
 - Nombre: {Server Component / Client Component / BFF Route Handler / Custom Hook / etc.}
 - Justificación: {...}
+
+**Ventajas de versión aprovechadas:**
+- Next.js 15: {feature aprovechada, ej: Server Actions estables, PPR (Partial Prerendering), Turbopack prod, after() API — o "No aplica"}
+- React 19: {feature aprovechada, ej: use() hook, Server Components composables, form Actions, useOptimistic — o "No aplica"}
+- TypeScript 5.x: {feature aprovechada, ej: const type params, variadic tuple improvements — o "No aplica"}
+- Tailwind CSS 4: {feature aprovechada, ej: @theme directive, CSS-first config — o "No aplica"}
+(Incluir solo las que aplican a la tarea)
 
 **SOLID aplicado:**
 - [S] SRP — {Un componente = una responsabilidad}
@@ -227,10 +241,19 @@ fintech-frontend/  (rama: feature/first)
 **DRY:** {¿Lógica compartida? → extraída a hook o lib/api/}
 **KISS:** {¿Solución más simple posible?}
 **YAGNI:** {¿Solo lo requerido para esta feature?}
-**Boy Scout:** {¿Se mejoró algo en archivos tocados?}
+**Boy Scout:** {¿Se mejoró algo en archivos tocados? — indicar archivo y cambio}
 
-**Recomendaciones de mejora:**
-1. {...}
+**Recomendaciones de mejora — [BACK]:**
+1. {Recomendación al equipo de backend basada en lo observado desde el frontend — prioridad: Alta/Media/Baja}
+(Si no aplica: "Sin recomendaciones de backend.")
+
+**Recomendaciones de mejora — [DBA]:**
+1. {Recomendación sobre esquema, índices o performance de BD que impacta al frontend — prioridad: Alta/Media/Baja}
+(Si no aplica: "Sin recomendaciones de DBA.")
+
+**Recomendaciones de mejora — [FRONT]:**
+1. {Recomendación concreta de frontend, UX, accesibilidad, performance o SSR — prioridad: Alta/Media/Baja}
+(Si no aplica: "Sin recomendaciones de frontend.")
 ```
 
 ---

@@ -113,7 +113,15 @@ Todo agente activo en este espacio debe aplicar en **cada cambio**:
 - **YAGNI**: No implementar funcionalidad no requerida explícitamente.
 - **Boy Scout Rule**: Dejar cada archivo mejor de como se encontró.
 
-**Al entregar cada tarea**, el agente debe incluir el bloque de validación de principios (ver `design-principles-validation.md`): qué hizo, qué usó, qué principios aplicó.
+**Al entregar cada tarea**, el agente DEBE incluir el bloque de validación de principios (ver `design-principles-validation.md`) con estas 5 secciones obligatorias:
+1. **Qué se implementó** — descripción breve de la funcionalidad entregada.
+2. **Patrón de diseño** — nombre y justificación del patrón elegido.
+3. **Ventajas de versión aprovechadas** — qué features de .NET 9 / EF Core 9 / MySQL 8 / MongoDB 7 / Redis 7 / MassTransit 8 / Next.js 15 / React 19 se utilizaron (o "No aplica" por sección).
+4. **Boy Scout Rule** — qué se mejoró en los archivos tocados (o "No se encontraron violaciones").
+5. **Recomendaciones de mejora segmentadas**:
+   - `[BACK]` — para senior-backend-engineer / senior-cqrs-specialist / senior-security-architect.
+   - `[DBA]` — para senior-dba (esquema, índices, migraciones, Kafka).
+   - `[FRONT]` — para senior-frontend-engineer (UX, SSR, componentes, integración).
 
 ---
 

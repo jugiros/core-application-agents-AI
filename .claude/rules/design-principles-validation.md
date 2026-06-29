@@ -17,9 +17,22 @@ Cada vez que un agente genere o modifique código, **debe adjuntar en su respues
 ```
 ### Validación de principios — {NombreDeClaseOFunción}
 
+**Qué se implementó:**
+- {Descripción breve de la funcionalidad entregada: clase, handler, endpoint, componente, migración, etc.}
+
 **Patrón de diseño utilizado:**
-- Nombre: {Repository / Command Handler / Query Handler / Factory / Strategy / Observer / Decorator / Pipeline / etc.}
+- Nombre: {Repository / Command Handler / Query Handler / Factory / Strategy / Observer / Decorator / Pipeline / Server Component / BFF Route Handler / etc.}
 - Justificación: {Por qué se eligió este patrón en este contexto específico}
+
+**Ventajas de versión aprovechadas:**
+- .NET 9 / C# 13: {feature aprovechada, ej: primary constructors, collection expressions, frozen collections, TimeProvider — o "No aplica"}
+- EF Core 9 / Pomelo 9: {feature aprovechada, ej: ExecuteUpdate, complex types sin tabla — o "No aplica"}
+- MassTransit 8.x: {feature aprovechada — o "No aplica"}
+- MySQL 8.x: {feature aprovechada, ej: JSON columns, window functions, CTE — o "No aplica"}
+- MongoDB 7: {feature aprovechada, ej: compound wildcard indexes, $rank — o "No aplica"}
+- Redis 7: {feature aprovechada, ej: Sharded Pub/Sub, LMPOP — o "No aplica"}
+- Next.js 15 / React 19: {feature aprovechada, ej: Server Actions, use() hook, PPR, Turbopack — o "No aplica"}
+(Incluir solo las que aplican a la tarea; omitir las que no sean relevantes)
 
 **SOLID aplicado:**
 - [S] SRP — {¿Sí/No? — Explicación: esta clase tiene una única responsabilidad porque...}
@@ -40,10 +53,17 @@ Cada vez que un agente genere o modifique código, **debe adjuntar en su respues
 **Boy Scout Rule:**
 - {¿Se mejoró algo preexistente? — Sí: {qué se mejoró y en qué archivo} / No: no se encontraron violaciones en los archivos tocados}
 
-**Recomendaciones de mejora:**
-1. {Recomendación concreta — prioridad: Alta/Media/Baja}
-2. {Recomendación concreta — prioridad: Alta/Media/Baja}
-(Si no hay recomendaciones, indicar: "Sin recomendaciones pendientes para esta implementación.")
+**Recomendaciones de mejora — [BACK] (senior-backend-engineer / senior-cqrs-specialist / senior-security-architect):**
+1. {Recomendación concreta de backend — prioridad: Alta/Media/Baja}
+(Si no aplica: "Sin recomendaciones de backend para esta implementación.")
+
+**Recomendaciones de mejora — [DBA] (senior-dba):**
+1. {Recomendación concreta de base de datos, esquema, índices, migraciones o Kafka — prioridad: Alta/Media/Baja}
+(Si no aplica: "Sin recomendaciones de DBA para esta implementación.")
+
+**Recomendaciones de mejora — [FRONT] (senior-frontend-engineer):**
+1. {Recomendación concreta de frontend, UX, componentes o integración SSR — prioridad: Alta/Media/Baja}
+(Si no aplica: "Sin recomendaciones de frontend para esta implementación.")
 ```
 
 ---
@@ -55,9 +75,21 @@ Para el handler `GetBalanceQueryHandler`:
 ```
 ### Validación de principios — GetBalanceQueryHandler
 
+**Qué se implementó:**
+- Handler de consulta CQRS que obtiene el saldo de una cuenta con cache-aside Redis + fallback a MongoDB.
+
 **Patrón de diseño utilizado:**
 - Nombre: Query Handler (CQRS) + Cache-Aside
 - Justificación: La separación Command/Query garantiza que las consultas de saldo no generen efectos secundarios. Cache-Aside se eligió sobre Read-Through porque permite control explícito del TTL y degradación graceful ante fallos de Redis.
+
+**Ventajas de versión aprovechadas:**
+- .NET 9 / C# 13: Primary constructor en GetBalanceQueryHandler — elimina boilerplate de campo privado readonly.
+- EF Core 9 / Pomelo 9: No aplica (lectura desde MongoDB, no EF Core).
+- MassTransit 8.x: No aplica en este handler.
+- MySQL 8.x: No aplica (solo lectura).
+- MongoDB 7: Compound wildcard index en { accountId, date } — reduce COLLSCAN en consultas de historial.
+- Redis 7: No aplica (se usa StackExchange.Redis con SetAsync estándar).
+- Next.js 15 / React 19: No aplica (es capa de backend).
 
 **SOLID aplicado:**
 - [S] SRP — Sí. Esta clase tiene una única responsabilidad: obtener el saldo de una cuenta, primero desde Redis y luego desde BD si hay cache miss.
@@ -78,9 +110,15 @@ Para el handler `GetBalanceQueryHandler`:
 **Boy Scout Rule:**
 - Sí. Se encontró que ICacheService en la versión anterior no tenía ExistsAsync. Se añadió el método al puerto durante esta implementación.
 
-**Recomendaciones de mejora:**
+**Recomendaciones de mejora — [BACK]:**
 1. Agregar métricas de cache hit/miss ratio mediante ILogger o un contador de Prometheus — prioridad: Media
 2. Considerar IMemoryCache como segunda capa (L1 local) antes de Redis (L2 distribuido) si la latencia de Redis supera 5ms — prioridad: Baja
+
+**Recomendaciones de mejora — [DBA]:**
+1. Crear índice TTL en MongoDB sobre el campo `expiresAt` del documento de saldo para limpieza automática — prioridad: Media
+
+**Recomendaciones de mejora — [FRONT]:**
+1. El componente de saldo debe manejar estado "actualizando" durante los 2 s de consistencia eventual post-transferencia (polling o skeleton UI) — prioridad: Alta
 ```
 
 ---
