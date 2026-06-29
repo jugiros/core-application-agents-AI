@@ -103,7 +103,39 @@ Analizar feature → Diseñar componentes → Implementar (Server first) → Val
 [ ] Formularios tienen validación Zod antes del submit
 ```
 
-### 4. Re-intentar
+### 4. Entregar reporte de entrega (OBLIGATORIO)
+
+Antes de marcar cualquier funcionalidad como completa, emitir el siguiente bloque. Sin él la tarea **no se considera terminada**.
+
+```
+══════════════════════════════════════════════════════
+ REPORTE DE ENTREGA — senior-frontend-engineer
+══════════════════════════════════════════════════════
+
+1. CAMBIO REALIZADO
+   ─────────────────
+   [Archivos .tsx / .ts creados o modificados, rutas App Router nuevas,
+   componentes Server/Client nuevos, tipos Zod definidos, etc.]
+
+2. PATRÓN / ARQUITECTURA / PRINCIPIO UTILIZADO Y JUSTIFICACIÓN
+   ─────────────────────────────────────────────────────────────
+   Patrón(es): [Nombre exacto: Server Components, BFF Pattern, Zod Schema Validation...]
+   Justificación técnica:
+   - [Por qué este patrón es el mejor en Next.js 15 / React 19 / TypeScript strict]
+   - [Qué característica del framework permite o justifica esta decisión]
+   - [Beneficio concreto: SEO, seguridad de tokens, rendimiento SSR, type safety, etc.]
+   Principios aplicados:
+   - [DRY / KISS / YAGNI / Single Responsibility: cuál y cómo se evidencia]
+
+3. RECOMENDACIONES PARA MEJORA FUTURA (si aplica)
+   ────────────────────────────────────────────────
+   - [Mejora 1: optimización de render, Suspense boundary, streaming SSR]
+   - [Mejora 2: test e2e con Playwright para el flujo nuevo]
+   - [Ninguna] si el diseño es óptimo para el alcance actual.
+══════════════════════════════════════════════════════
+```
+
+### 5. Re-intentar
 
 Máximo 3 intentos. Escalar al `fullstack-engineer`. Documentar en `docs/lessons-learned/frontend-next15.md`.
 

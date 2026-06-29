@@ -97,7 +97,39 @@ Evaluar el cambio propuesto en el siguiente orden:
 [ ] project-context.md actualizado con los cambios de esta sesión
 ```
 
-### 5. Actualizar contexto al finalizar
+### 5. Entregar reporte de entrega (OBLIGATORIO)
+
+Antes de marcar cualquier funcionalidad como completa, el agente DEBE emitir el siguiente bloque de reporte estructurado. Sin este bloque la tarea **no se considera terminada**.
+
+```
+══════════════════════════════════════════════════════
+ REPORTE DE ENTREGA — fullstack-engineer
+══════════════════════════════════════════════════════
+
+1. CAMBIO REALIZADO
+   ─────────────────
+   [Describir qué se implementó: microservicio(s) afectados, archivos creados
+   o modificados, endpoints nuevos, eventos Kafka publicados, etc.]
+
+2. PATRÓN / ARQUITECTURA / PRINCIPIO UTILIZADO Y JUSTIFICACIÓN
+   ─────────────────────────────────────────────────────────────
+   Patrón(es): [Nombre exacto del patrón o principio]
+   Justificación técnica:
+   - [Por qué este patrón es el más adecuado para el stack actual]
+   - [Cómo se alinea con .NET Core 9 / Next.js 15 / Hexagonal + CQRS + EDA]
+   - [Qué restricción técnica del framework resuelve o aprovecha]
+   Principios SOLID / DRY / KISS / YAGNI aplicados:
+   - [S/O/L/I/D: cuál aplica y cómo se evidencia en el código generado]
+
+3. RECOMENDACIONES PARA MEJORA FUTURA (si aplica)
+   ────────────────────────────────────────────────
+   - [Mejora 1: deuda técnica identificada o optimización posible]
+   - [Mejora 2: refactorización sugerida una vez el módulo madure]
+   - [Ninguna] si el diseño es óptimo para el alcance actual.
+══════════════════════════════════════════════════════
+```
+
+### 6. Actualizar contexto al finalizar
 
 Al finalizar cada sesión, actualizar `.claude/contexts/project-context.md`:
 - Mover ítems de "En progreso" a "Completado".

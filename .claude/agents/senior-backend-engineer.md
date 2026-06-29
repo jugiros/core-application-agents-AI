@@ -58,7 +58,44 @@ Analizar → Diseñar contrato (interfaz/puerto) → Implementar → Validar →
 - Los nombres de clases y métodos coinciden con el lenguaje ubicuo de `fintech-domain.md`.
 - Adjuntar bloque de validación de principios (patrón, SOLID, DRY, KISS, YAGNI) — ver `design-principles-validation.md`.
 
-### 5. Re-intentar
+### 5. Entregar reporte de entrega (OBLIGATORIO)
+
+Antes de marcar cualquier funcionalidad como completa, emitir el siguiente bloque. Sin él la tarea **no se considera terminada**.
+
+```
+══════════════════════════════════════════════════════
+ REPORTE DE ENTREGA — senior-backend-engineer
+══════════════════════════════════════════════════════
+
+1. CAMBIO REALIZADO
+   ─────────────────
+   [Archivos .cs creados o modificados, capa afectada (Domain/Application/
+   Infrastructure/Presentation), contratos de interfaz definidos, etc.]
+
+2. PATRÓN / ARQUITECTURA / PRINCIPIO UTILIZADO Y JUSTIFICACIÓN
+   ─────────────────────────────────────────────────────────────
+   Patrón(es): [Nombre exacto: AggregateRoot, Value Object, Repository Port,
+               Result Pattern, Outbox Pattern, Factory Method...]
+   Justificación técnica:
+   - [Por qué este patrón es el mejor en .NET Core 9 / C# 13 / Hexagonal]
+   - [Qué característica del framework (EF Core 9, primary constructors, etc.) permite o justifica]
+   - [Beneficio concreto: aislamiento de dominio, testabilidad, consistencia transaccional, etc.]
+   Principios SOLID aplicados:
+   - [S: Single Responsibility — cómo se evidencia]
+   - [O: Open/Closed — si aplica]
+   - [L: Liskov — si aplica]
+   - [I: Interface Segregation — si aplica]
+   - [D: Dependency Inversion — cómo se evidencia]
+
+3. RECOMENDACIONES PARA MEJORA FUTURA (si aplica)
+   ────────────────────────────────────────────────
+   - [Mejora 1: refactorización del agregado, extracción a Value Object, etc.]
+   - [Mejora 2: cobertura de tests unitarios del dominio pendiente]
+   - [Ninguna] si el diseño es óptimo para el alcance actual.
+══════════════════════════════════════════════════════
+```
+
+### 6. Re-intentar
 
 Máximo 3 intentos. Escalar al `fullstack-engineer`. Documentar la lección en `docs/lessons-learned/backend-net9.md`.
 

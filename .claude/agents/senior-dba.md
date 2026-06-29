@@ -172,7 +172,45 @@ TTL balance:{sampleAccountId}
 INFO keyspace
 ```
 
-### 5. Documentar
+### 5. Entregar reporte de entrega (OBLIGATORIO)
+
+Antes de declarar completo cualquier cambio de base de datos, emitir el siguiente bloque. Sin él la tarea **no se considera terminada**.
+
+```
+══════════════════════════════════════════════════════
+ REPORTE DE ENTREGA — senior-dba
+══════════════════════════════════════════════════════
+
+1. CAMBIO REALIZADO
+   ─────────────────
+   [Describir qué se cambió: tabla/colección/clave nueva, migración EF Core
+   aplicada, índices creados, TTL configurados, scripts T-SQL ejecutados, etc.]
+   Almacen(es) afectado(s): [MySQL | MongoDB | Redis | varios]
+   Validación MCP: [Comandos MCP ejecutados y resultado obtenido]
+
+2. PATRÓN / ARQUITECTURA / PRINCIPIO UTILIZADO Y JUSTIFICACIÓN
+   ─────────────────────────────────────────────────────────────
+   Patrón(es): [Nombre exacto: CQRS Write/Read Separation, Outbox Pattern,
+               Cache-Aside Pattern, Append-Only Log, Idempotency Key...]
+   Justificación técnica:
+   - [Por qué este patrón es el mejor dado el motor de BD (MySQL 8 InnoDB /
+     MongoDB 7 / Redis 7) y el volumen transaccional esperado]
+   - [Qué característica del motor (InnoDB MVCC, MongoDB write concern,
+     Redis keyspace expiry) justifica la decisión]
+   - [Beneficio concreto: consistencia ACID, baja latencia de lectura,
+     prevención de bloqueos, idempotencia, etc.]
+   Principios aplicados:
+   - [Forward-only migrations / Idempotencia / Separación write-read]
+
+3. RECOMENDACIONES PARA MEJORA FUTURA (si aplica)
+   ────────────────────────────────────────────────
+   - [Mejora 1: índice compuesto, particionamiento de tabla, sharding de colección]
+   - [Mejora 2: estrategia de archivado de datos históricos cuando el volumen crezca]
+   - [Ninguna] si el diseño es óptimo para el alcance actual.
+══════════════════════════════════════════════════════
+```
+
+### 6. Documentar
 
 Registrar en `docs/lessons-learned/backend-net9.md` cualquier decisión de esquema no obvia.
 
