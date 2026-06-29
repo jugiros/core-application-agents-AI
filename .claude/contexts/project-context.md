@@ -17,14 +17,14 @@
 | **Microservicio 3** | `account-queries-service` — Read CQRS, MongoDB + Redis + Kafka (⏳ Por crear) |
 | **API Gateway** | `api-gateway` — YARP .NET Core 9 (⏳ Por crear) |
 | **Repositorio frontend** | `fintech-frontend` (rama: `feature/first`) — Next.js 15 SSR (⏳ Por crear) |
-| **Infraestructura** | Docker Compose: MySQL 8, MongoDB 7, Redis 7, Kafka 3.7 (bitnami) + Kafka UI |
+| **Infraestructura** | Docker Compose: MySQL 8, MongoDB 7, Redis 7, apache/kafka:latest (KRaft) + Kafka UI — ✅ corriendo |
 | **Mensajería EDA** | Apache Kafka + MassTransit 8.x — Outbox Pattern |
 | **Calidad de código** | SonarLint IDE + `SonarAnalyzer.CSharp` (backend) + `eslint-plugin-sonarjs` (frontend) |
 | **Stack backend** | .NET Core 9, Hexagonal + DDD, CQRS (MediatR), MySQL 8 + MongoDB 7 + Redis 7, OAuth 2.0 + JWT |
 | **Stack frontend** | Next.js 15 (SSR), React 19, TypeScript, Tailwind CSS 4, shadcn/ui, NextAuth.js v5 |
-| **Fase actual** | `FASE 0 — Scaffolding completado / Arquitectura EDA + Docker definida` |
-| **Última sesión** | 2026-06-25 |
-| **Próxima tarea prioritaria** | Crear `docker/docker-compose.infra.yml` y validar todos los servicios corriendo |
+| **Fase actual** | `FASE 1 — Infraestructura Docker levantada y validada` |
+| **Última sesión** | 2026-06-25 (sesión 2) |
+| **Próxima tarea prioritaria** | Entidades DDD: Account + Transfer (AggregateRoot) + Value Objects (Balance, AccountNumber, Currency, TransferAmount) en `core-transactions-service` |
 | **Prompt backend** | `.claude/prompt-maestro.md` + `.claude/contexts/project-context.md` |
 | **Prompt frontend** | `.claude/prompt-maestro-frontend.md` + `.claude/contexts/project-context.md` |
 
@@ -79,24 +79,28 @@
 
 #### ❌ Pendiente de inicio
 
-**Infraestructura Docker (PRIORIDAD ALTA — bloquea todo lo demás):**
+**Infraestructura Docker (✅ COMPLETADO — sesión 2026-06-25):**
 
-| Componente | Prioridad | Repo destino |
+| Componente | Estado | Notas |
 |---|---|---|
-| Crear `docker/docker-compose.infra.yml` | 🔴 Alta | `core-transactions-service` |
-| Crear `Dockerfile` multi-stage .NET 9 | 🔴 Alta | Cada microservicio |
-| Validar MySQL corriendo en Docker (`mysql-fintech`) | 🔴 Alta | — |
-| Validar MongoDB corriendo en Docker (`mongodb-fintech`) | 🔴 Alta | — |
-| Validar Redis corriendo en Docker (`redis-fintech`) | 🔴 Alta | — |
-| Validar Kafka corriendo en Docker (`kafka-fintech`) | 🔴 Alta | — |
+| `docker/docker-compose.infra.yml` | ✅ Creado | apache/kafka:latest (KRaft), mysql:8.0, mongo:7.0, redis:7-alpine, kafka-ui |
+| `Dockerfile` multi-stage .NET 9 | ✅ Creado | SDK 9.0 build → aspnet:9.0 runtime, non-root user |
+| `.dockerignore` | ✅ Creado | bin/, obj/, .git/, .vs/ excluidos |
+| MySQL `mysql-fintech` | ✅ Running (healthy) | puerto 3306, `mysqld is alive` |
+| MongoDB `mongodb-fintech` | ✅ Running (healthy) | puerto 27017, `{ ok: 1 }` |
+| Redis `redis-fintech` | ✅ Running (healthy) | puerto 6379, `PONG` |
+| Kafka `kafka-fintech` | ✅ Running (healthy) | puerto 9092, KRaft sin Zookeeper |
+| Kafka UI `kafka-ui-fintech` | ✅ Running | http://localhost:8090 |
 
-**SonarLint (PRIORIDAD ALTA — instalar antes de escribir código):**
+**Nota imagen Kafka:** `bitnami/kafka` ya no es gratuito en Docker Hub (ahora es comercial). Se usa `apache/kafka:latest` (imagen oficial Apache) con variables KRaft nativas (`KAFKA_NODE_ID`, `KAFKA_PROCESS_ROLES`, etc.). Actualizar regla en `docker-infrastructure.md`.
 
-| Componente | Prioridad | Acción |
+**SonarLint (✅ COMPLETADO — sesión 2026-06-25):**
+
+| Componente | Estado | Acción |
 |---|---|---|
-| Instalar extensión SonarLint en IDE | 🔴 Alta | VS Code / Rider / Visual Studio |
-| Agregar `.editorconfig` al backend | 🔴 Alta | Ver `.claude/rules/sonar-code-quality.md` |
-| Agregar `eslint-plugin-sonarjs` al frontend | 🔴 Alta | `npm install -D eslint-plugin-sonarjs` |
+| Instalar extensión SonarLint en IDE | ⚠️ Pendiente usuario | VS Code / Rider / Visual Studio |
+| `.editorconfig` en backend | ✅ Creado | `PruebaNetCoreProject/.editorconfig` — reglas S* + CA* |
+| `eslint-plugin-sonarjs` al frontend | ⏳ Cuando se cree frontend | `npm install -D eslint-plugin-sonarjs` |
 
 **Microservicios por crear:**
 
@@ -178,6 +182,10 @@
 | `PruebaNetCoreProject/IBalanceReadModel.cs` | Creado — puerto Application |
 | `PruebaNetCoreProject/MongoDbContext.cs` | Creado — adaptador Infrastructure |
 | `PruebaNetCoreProject/RedisCacheService.cs` | Creado — adaptador Infrastructure |
+| `PruebaNetCoreProject/docker/docker-compose.infra.yml` | ✅ Creado (sesión 2) — apache/kafka:latest, mysql:8.0, mongo:7.0, redis:7-alpine, kafka-ui |
+| `PruebaNetCoreProject/Dockerfile` | ✅ Creado (sesión 2) — multi-stage SDK 9.0 → aspnet:9.0, non-root user |
+| `PruebaNetCoreProject/.dockerignore` | ✅ Creado (sesión 2) |
+| `PruebaNetCoreProject/.editorconfig` | ✅ Creado (sesión 2) — SonarLint C# rules (S*, CA*) |
 
 ---
 
@@ -191,7 +199,7 @@
 | **MassTransit 8.x sobre Confluent.Kafka directo** | Abstrae el broker, retry integrado, Dead Letter Queue, DI nativo | 2026-06 |
 | **Outbox Pattern** (MySQL + background service) | Garantiza at-least-once delivery sin 2PC — ACID + eventual | 2026-06 |
 | **Docker Compose para toda la infraestructura** | Reproducibilidad del entorno; elimina dependencia de XAMPP | 2026-06 |
-| **bitnami/kafka:3.7 con KRaft** (sin Zookeeper) | Simplificación de infraestructura — Kafka moderno | 2026-06 |
+| **apache/kafka:latest con KRaft** (sin Zookeeper) | `bitnami/kafka` ya no es gratuito en Docker Hub (comercial). `apache/kafka` es la imagen oficial Apache — variables KRaft nativas | 2026-06-25 |
 | **SonarLint obligatorio** (IDE + CI) | Calidad de código; bloquear issues Critical/Blocker antes de merge | 2026-06 |
 | CQRS con MediatR (no EventSourcing) | Simplicidad y madurez del ecosistema .NET 9 | 2026-06 |
 | Commands → MySQL / Queries → MongoDB + Redis | ACID para escritura, velocidad para lectura | 2026-06 |
